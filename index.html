@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>팀 비품 신청</title>
+<style>
+  :root { --muk:#262422; --brick:#a03b2b; --paper:#faf8f5; --line:#d9d4cd; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--paper); color:var(--muk); padding:24px; }
+  .wrap { max-width:960px; margin:0 auto; }
+  .kicker { color:var(--brick); font-size:13px; font-weight:700; letter-spacing:.02em; }
+  h1 { font-size:28px; margin:4px 0 6px; }
+  .lead { color:#6b655e; font-size:14px; }
+  .badge { float:right; font-size:12px; color:#6b655e; }
+  .badge::before { content:'●'; color:var(--brick); margin-right:6px; font-size:9px; }
+  .notice { margin:16px 0; padding:10px 12px; background:#f6e9e6; border-left:3px solid var(--brick); font-size:13px; }
+  .grid { display:grid; grid-template-columns:1fr 1.4fr; gap:32px; border-top:2px solid var(--muk); padding-top:20px; }
+  @media (max-width:720px){ .grid { grid-template-columns:1fr; } }
+  h2 { font-size:17px; margin-bottom:4px; }
+  .hint { font-size:12px; color:#6b655e; margin-bottom:12px; }
+  label { display:block; font-size:13px; font-weight:700; margin:12px 0 4px; }
+  input { width:100%; padding:9px 10px; border:1px solid var(--line); background:#fff; font-size:14px; }
+  .help { font-size:12px; color:#6b655e; margin-top:3px; }
+  .error { color:var(--brick); font-size:12px; margin-top:3px; min-height:14px; }
+  button.save { width:100%; margin-top:16px; padding:12px; background:var(--brick); color:#fff; border:0; font-size:15px; font-weight:700; cursor:pointer; }
+  button.save:disabled { opacity:.5; cursor:wait; }
+  .status { margin-top:10px; font-size:13px; min-height:18px; }
+  .status.ok { color:#2c6e49; }
+  .status.err { color:var(--brick); }
+  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  th { text-align:left; font-weight:700; background:#f2efec; padding:8px; border-bottom:1px solid var(--line); }
+  td { padding:8px; border-bottom:1px solid var(--line); }
+  td.num { text-align:right; font-weight:700; }
+  .count { float:right; color:var(--brick); font-weight:700; font-size:13px; }
+  .foot { margin-top:24px; padding-top:10px; border-top:1px solid var(--line); font-size:12px; color:#6b655e; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .reset { background:none; border:0; color:#6b655e; text-decoration:underline; cursor:pointer; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">로컬 저장 · 이 브라우저만</span>
+  <div class="kicker">로컬 실습 · 가상 데이터</div>
+  <h1>팀 비품 신청</h1>
+  <p class="lead">이름과 품목, 수량을 입력하면 이 브라우저에 최근 신청 10건을 저장합니다.</p>
+  <div class="notice">실제 직원·고객 정보를 넣지 마세요. 이 화면은 로그인·서버 저장·공유 기능이 없는 흐름 검증용 앱입니다.</div>
+
+  <div class="grid">
+    <section>
+      <h2>신청 입력</h2>
+      <p class="hint">세 항목 모두 확인한 뒤 저장합니다.</p>
+      <label for="applicant">신청자 이름</label>
+      <input id="applicant" autocomplete="off">
+      <p class="help">가상 이름을 사용하세요.</p>
+      <p class="error" id="err-applicant"></p>
+      <label for="item">품목</label>
+      <input id="item" autocomplete="off">
+      <p class="error" id="err-item"></p>
+      <label for="quantity">수량</label>
+      <input id="quantity" inputmode="numeric" autocomplete="off">
+      <p class="help">1 이상의 정수만 입력합니다. 예: 2</p>
+      <p class="error" id="err-quantity"></p>
+      <button class="save" id="save">신청 저장</button>
+      <p class="status" id="status" role="status"></p>
+    </section>
+    <section>
+      <h2>최근 신청 <span class="count" id="count"></span></h2>
+      <p class="hint">새 신청이 위에 표시됩니다.</p>
+      <table>
+        <thead><tr><th>저장 시각</th><th>신청자</th><th>품목</th><th style="text-align:right">수량</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="hint" id="keepnote">열한 번째 신청부터는 가장 오래된 신청을 이 브라우저 저장소에서 제거합니다.</p>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span>저장 키 <code>supplyRequests</code></span>
+    <span>새로고침해도 같은 브라우저 프로필에서는 목록이 유지됩니다. <button class="reset" id="reset">실습 데이터 초기화</button></span>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
